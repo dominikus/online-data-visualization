@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+
+    <script>
+      var countries = 'https://gist.githubusercontent.com/denjn5/c96c5900f0ffefc77d2bfe57d4d25df5/raw/6aa262b7711c239884d703934081afb22dfe2a79/country-hierarchy.csv';
+      
+      d3.csv(countries, function(result){
+        var root = d3.stratify()
+        (result);
+
+        console.log(root);
+      });
+
+    </script>
+  </body>
+</html>

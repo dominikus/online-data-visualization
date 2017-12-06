@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    <script>
+      var svg = d3.select('svg');
+
+      var nodes = [];
+
+      var redraw = function(){
+        var circles = svg.selectAll('circle').data(nodes);
+
+        circles.enter()
+          .append('circle')
+            .style('fill', 'red')
+            .attr('r', function(d){ return d.r;})
+          .merge(circles)
+            .attr('cx', function(d){ return d.x; })
+            .attr('cy', function(d){ return d.y; });
+      };
+
+      var collisionForce = d3.forceCollide().radius(function(d){ return d.r; }).iterations(5);
+      
+      var sim = d3.forceSimulation()
+        .velocityDecay(0.1)
+        .force('collision', collisionForce)
+        .on('tick', redraw);
+
+
+      var addCircle = function(){
+        var circle = {
+          x: 400,
+          y: 400,
+          r: Math.random() * 60
+        };
+        nodes.push(circle);
+
+        sim.nodes(nodes);
+        sim.alpha(1);
+      };
+
+      setInterval(addCircle, 500);
+
+    </script>
+  </body>
+</html>

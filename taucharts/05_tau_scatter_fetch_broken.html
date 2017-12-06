@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations.">
+
+    <script src="https://cdn.jsdelivr.net/d3js/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.css">
+  
+    <style>
+      #chart {
+        width: 800px;
+        height: 500px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="chart"></div>
+    <script>
+
+// old data scheme:
+// {"id":3,"name":"Venusaur","type":"Grass","hp":80,"attack":82,"defense":83},
+//
+
+var remoteDataURL = 'https://dominiku.indus.uberspace.de/data/pokemon.json';
+
+console.log('loading data...');
+
+fetch(remoteDataURL)
+.then(function(d){
+  return d.json();
+})
+.then(function(data){
+  var data = d;
+
+  console.log('loaded data with ' + data.length + ' entries');
+
+  var chart = new tauCharts.Chart({
+    data: data,
+    type: 'scatterplot',
+    x: 'attack',
+    y: 'defense',
+    color: 'type',
+    plugins: [
+        tauCharts.api.plugins.get('tooltip')(),
+        tauCharts.api.plugins.get('legend')()
+    ],
+    guide: {
+      x: {
+        label: 'Pokémon attack',
+        min: 0,
+        max: 200,
+      },
+      y: {
+        label: 'Pokémon defense',
+        min: 0,
+        max: 200,
+      },
+      padding: {
+        t: 20, l: 20, r: 20, b: 20,
+      },
+      showGridLines: 'xy'
+    }
+  });
+
+  chart.renderTo('#chart');
+});
+
+    </script>
+  </body>
+</html>

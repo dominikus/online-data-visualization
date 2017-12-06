@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js" type="text/javascript"></script>  
+    
+  </head>
+
+  <body>
+    <div id="chart">
+      <canvas width="1000" height="600"></canvas>
+    </div>
+
+    <script>
+      var remoteDataURL = 'https://api.coindesk.com/v1/bpi/historical/close.json';
+
+      console.log('loading data...');
+
+      fetch(remoteDataURL)
+      .then(function(d){
+        return d.json();
+      })
+      .then(function(d){
+        var rawData = d.bpi;
+
+        var data = Object.keys(rawData).map(function(key){
+          return {
+            "date": key,
+            "value": rawData[key]
+          };
+        });
+
+        var timeScale = d3.scaleTime()
+          .domain(d3.extent(data, function(d){ return new Date(d.date); }))
+          .range([50, 950]);
+
+        var valScale = d3.scaleLinear()
+          .domain([0, d3.max(data, function(d){ return d.value; })])
+          //.domain(d3.extent(data, function(d){ return d.value; }))
+          .range([550, 50]);
+
+        var line = d3.line()
+          .x(function(d){ return timeScale(new Date(d.date)); })
+          .y(function(d){ return valScale(d.value); });
+        
+
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+
+        ctx.beginPath();
+        line.context(ctx)(data);
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+      });
+
+    </script>
+  </body>
+</html>

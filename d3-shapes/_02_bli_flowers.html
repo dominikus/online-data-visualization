@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+
+    <script>
+      var svg = d3.select('svg');
+
+      var colors = ["#3DA594", "#2CA3E0", "#237FBD", "#CE485D", "#7EA943", "#30A457", "#DCA922", "#7C3A73", "#E26237", "#606060", "#962828"];
+
+      var FLOWER_NUMBER = 8;
+
+      var generateData = function(){
+        return d3.range(FLOWER_NUMBER).map(function(){ return Math.random(); });
+      }
+
+      var drawArc = function(size){
+        return 'M 0 0 Q -' + size + ' 150 0 300 Q ' + size + ' 150 0 0';
+      };
+
+      var drawFlowers = function(){
+        var data = generateData();
+
+        var sum = data.reduce(function(acc, val){ return acc + val});
+        var deg = 0;
+        
+        data = data.map(function(d){
+          deg += (d * 0.5 / sum) * 360;
+          var resu = {
+            "val": d,
+            "deg": deg
+          };
+          deg += (d * 0.5 / sum) * 360;
+          return resu;
+        });
+
+        var flowers = svg.selectAll('path').data(data);
+
+        flowers.enter()
+            .append('path')
+            .style('fill', function(d,i){ return colors[i];})
+            .attr('transform', 'translate(400,400)')
+          .merge(flowers)
+            .transition()
+            .attr('transform', function(d,i){ return 'translate(400, 400) rotate('+d.deg+')'})
+            .attr('d', function(d){ return drawArc(25 + d.val * 80); });
+      }
+
+      setInterval(drawFlowers, 1500);
+
+    </script>
+  </body>
+</html>

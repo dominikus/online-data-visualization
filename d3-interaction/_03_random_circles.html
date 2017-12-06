@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    <script>
+    var svg = d3.select('svg');
+
+    var drag = d3.drag().on('drag', function(d){
+      d3.select(this).attr('cx', d3.event.x).attr('cy', d3.event.y);
+    });
+
+    d3.range(50).forEach(function(){
+      svg.append('circle')
+        .attr('cx', Math.random() * 800)
+        .attr('cy', Math.random() * 800)
+        .attr('r', 15)
+        .call(drag);
+    });
+    </script>
+  </body>
+</html>

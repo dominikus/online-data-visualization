@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic Mapbox html</title>
+    <meta name="description" content="A template for creating online maps using MapboxGL.">
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
+  </head>
+
+  <body>
+    <div id='map' style='width: 400px; height: 300px;'></div>
+    <script>
+    var dataURL = 'http://dominiku.indus.uberspace.de/data/countries.geo.json';
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZG9taW5pa3VzIiwiYSI6ImZ5TmJxSVUifQ.Wvhl1BzDFbO5gji30E1mDw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/dominikus/cjatiduwn7lrf2rqwgzqzjrc0'
+    });
+
+    map.on('load', function(){
+      d3.json(dataURL, function(world){
+        map.addLayer({
+          'id': 'outlines',
+          'type': 'fill',
+          'source': {
+            'type': 'geojson',
+            'data': world
+          },
+          'paint': {
+            'fill-color': '#0022ff',
+            'fill-opacity': 0.5
+          }
+        });
+      });
+    });
+    </script>
+  </body>
+</html>
+
+

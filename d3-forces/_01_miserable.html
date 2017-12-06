@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    <script>
+      var dataURL = 'https://dominiku.indus.uberspace.de/data/miserables.json';
+
+      d3.json(dataURL, function(data){
+        var svg = d3.select('svg');
+
+        console.log(data);
+        
+        var ticked = function(){
+          var circles = svg.selectAll('circle')
+            .data(data.nodes);
+
+          circles.enter()
+            .append('circle')
+              .attr('r', 5)
+              .style('fill', 'rgba(255, 34, 128, 0.5)')
+            .merge(circles)
+              .attr('cx', function(d){ return d.x; })
+              .attr('cy', function(d){ return d.y; });
+
+          var links = svg.selectAll('line')
+            .data(data.links);
+
+          links.enter()
+            .append('line')
+              .style('stroke', 'rgba(34, 255, 128, 0.5)')
+            .merge(links)
+              .attr('x1', function(d){ return d.source.x; })
+              .attr('y1', function(d){ return d.source.y; })
+              .attr('x2', function(d){ return d.target.x; })
+              .attr('y2', function(d){ return d.target.y; });
+
+        };
+
+        var forceLink = d3.forceLink()
+          .id(function(d){ return d.id; })
+          .links(data.links);
+
+        var force = d3.forceSimulation(data.nodes)
+          .force("link", forceLink)
+          .force("charge", d3.forceManyBody())
+          .force("center", d3.forceCenter(400, 400))
+          .on('tick', ticked);
+
+      });
+      
+    </script>
+  </body>
+</html>

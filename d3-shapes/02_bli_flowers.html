@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+
+    <script>
+      var svg = d3.select('svg');
+
+      var colors = ["#3DA594", "#2CA3E0", "#237FBD", "#CE485D", "#7EA943", "#30A457", "#DCA922", "#7C3A73", "#E26237", "#606060", "#962828"];
+
+      var FLOWER_NUMBER = 8;
+
+      var generateData = function(){
+        return d3.range(FLOWER_NUMBER).map(function(){ return Math.random(); });
+      }
+
+      // draw flowers arranged around a circle
+      // (use SVG path quadratic curves to do it)
+
+      // make transitions to new data via generateData() in regular intervals
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    </style>
+  </head>
+
+  <body>
+      <div id='map' style='width: 800px; height: 800px;'></div>
+      <svg width="800" height="800"></svg>
+
+    <script>
+      var countriesData = 'https://dominiku.indus.uberspace.de/data/countries.tsv';
+      var densityData = 'https://dominiku.indus.uberspace.de/data/countries-population-density.tsv';
+      
+    </script>
+  </body>
+</html>

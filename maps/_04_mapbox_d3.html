@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    circle {
+      fill: rgba(23, 78, 243, 0.6);
+      stroke: yellow;
+    }
+    </style>
+  </head>
+
+  <body>
+      <div id='map' style='width: 800px; height: 800px;'></div>
+      <svg width="800" height="800"></svg>
+
+    <script>
+      var countriesData = 'https://dominiku.indus.uberspace.de/data/countries.tsv';
+      var densityData = 'https://dominiku.indus.uberspace.de/data/countries-population-density.tsv';
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZG9taW5pa3VzIiwiYSI6ImZ5TmJxSVUifQ.Wvhl1BzDFbO5gji30E1mDw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/dominikus/cjatiduwn7lrf2rqwgzqzjrc0'
+    });
+
+    map.on('load', function(){
+      d3.tsv(countriesData, function(countries){
+        d3.tsv(densityData, function(density){
+          console.log(countries);
+          console.log(density);
+
+          var data = density.filter(function(d){
+            return _.find(countries, {'name': d['Country Name']});
+          }).map(function(d){
+            var pos = _.find(countries, {'name': d['Country Name']});
+            return Object.assign(d, {
+              longitude: pos.longitude,
+              latitude: pos.latitude
+            });
+          });
+
+          console.log(data);
+
+          var scale = d3.scaleLog()
+            .domain(d3.extent(data, function(d){ return +d['2010'];}))
+            .range([0, 30]);
+
+          var svg = d3.select('svg');
+          
+          var drawCircles = function(){
+            var circles = svg.selectAll('circle').data(data);
+
+            circles.enter()
+              .append('circle')
+                .attr('r', function(d){ return scale(+d['2010']); })
+              .merge(circles)
+                .attr('cx', function(d){ return map.project([+d.longitude, +d.latitude]).x; })
+                .attr('cy', function(d){ return map.project([+d.longitude, +d.latitude]).y; });
+          }
+
+          drawCircles();
+
+          map.on('move', drawCircles);
+        });
+      });
+    });
+
+      
+    </script>
+  </body>
+</html>

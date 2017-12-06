@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <div id="chart">
+    </div>
+
+    <script>
+      var idCounter = 0;
+      var myData = [];
+
+      var svg = d3.select('#chart').append('svg')
+        .attr('width', 500)
+        .attr('height', 500);
+
+      var updateChart = function(){
+        myData.push({
+          id: idCounter++,
+          v1: Math.random() * 500,
+          v2: Math.random() * 500,
+          v3: Math.random() * 50
+        });
+
+        svg.selectAll('circle').data(myData)
+          .enter()
+          .append('circle')
+            .attr('cx', function(d){ return d.v1; })
+            .attr('cy', function(d){ return d.v2; })
+            .attr('r', function(d){ return d.v3; })
+            .style('fill', function(d){ return "rgb(" + 
+              Math.round((d.v1 / 500) * 255) + "," + 
+              Math.round((d.v2 / 500) * 255) + "," + 
+              Math.round((d.v3 / 50) * 255) + ")";
+            });
+      };
+
+      setInterval(updateChart, 100);
+    </script>
+  </body>
+</html>

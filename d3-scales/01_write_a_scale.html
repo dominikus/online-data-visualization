@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <div id="chart">
+      <svg width="300" height="200"></svg>
+    </div>
+
+    <script>
+      var myData = [12,24,3,7,55];
+
+      var svg = d3.select('svg');
+
+      var myScale = function(d){
+        // insert scale here
+        // should map from [0, 60] to [0, 200]
+
+        // remove this once you're done:
+        return d;
+      };
+
+      svg.selectAll('circle').data(myData)
+        .enter()
+          .append('circle')
+          .attr('cx', function(d,i){ return i * 50; })
+          .attr('r', 25)
+          .attr('cy', myScale);
+      
+    </script>
+  </body>
+</html>

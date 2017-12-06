@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style>
+    circle {
+      fill: #333;
+    }
+
+    circle.highlight {
+      fill: orange;
+    }
+
+    polygon {
+      fill: transparent;
+      stroke: none;
+    }
+
+    p {
+      font-family: sans-serif;
+      color: orange;
+    }
+    </style>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    <p id="status"></p>
+
+    <script>
+      var dataURL = 'https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/all-ages.csv';
+
+      // here's the data structure: https://github.com/fivethirtyeight/data/tree/master/college-majors
+      var sanitize = function(s){
+        return s.replace(/[\ \;\&\:\/]/g, '');
+      };
+
+      d3.csv(dataURL, function(data){
+        console.log(data);
+
+        var xScale = d3.scaleLinear()
+          .domain([0, d3.max(data, function(d){ return d.Median; })])
+          .range([50, 750]);
+        
+        var yScale = d3.scaleLinear()
+          .domain([0, d3.max(data, function(d){ return d.Unemployment_rate; })])
+          .range([750, 50]);
+        
+        var svg = d3.select('svg');
+        var status = d3.select('#status');
+
+        var dots = svg.selectAll('circle')
+          .data(data);
+        
+        dots.enter()
+          .append('circle')
+            .attr('id', function(d){ return sanitize(d.Major); })
+            .attr('r', 3)
+          .merge(dots)
+            .attr('cx', function(d){ return xScale(d.Median); })
+            .attr('cy', function(d){ return yScale(d.Unemployment_rate); });
+        
+        var xAxis = d3.axisBottom(xScale);
+
+        svg.append('g')
+          .attr('transform', 'translate(0, 750)')
+          .call(xAxis);
+        
+        var yAxis = d3.axisLeft(yScale);
+
+        svg.append('g')
+          .attr('transform', 'translate(50, 0)')
+          .call(yAxis);
+
+
+
+        // voronoi stuff:
+        var voronoi = d3.voronoi()
+          .extent([[50, 50], [750, 750]])
+          .x(function(d){ return xScale(d.Median)})
+          .y(function(d){ return yScale(d.Unemployment_rate)});
+
+        var partitioning = voronoi(data);
+
+        svg.append('g').selectAll('polygon').data(partitioning.polygons())
+          .enter()
+          .append('polygon')
+            .attr('points', function(d){ return d; })
+            .on('mouseover', function(d){
+              var id = sanitize(d.data.Major);
+              svg.select('#' + id).classed('highlight', true);
+              status.text(d.data.Major);
+            })
+            .on('mouseout', function(d){
+              var id = sanitize(d.data.Major);
+              svg.select('#' + id).classed('highlight', false);
+              status.text('');
+            });
+
+      });
+      
+    </script>
+  </body>
+</html>
+

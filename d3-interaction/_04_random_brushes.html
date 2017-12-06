@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style>
+    .highlight {
+      fill: pink;
+    }
+    </style>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    <script>
+    var svg = d3.select('svg');
+
+    var brushed = function(){
+      var topleft = d3.event.selection[0];
+      var bottomright = d3.event.selection[1];
+
+      svg.selectAll('circle').classed('highlight', function(d){
+        var x = d3.select(this).attr('cx');
+        var y = d3.select(this).attr('cy');
+        return (x > topleft[0] && x <= bottomright[0] && y > topleft[1] && y <= bottomright[1]);
+      });
+    };
+    
+    var brush = d3.brush();
+    brush.on('start brush', brushed);
+
+    svg.append('g').call(brush);
+
+    d3.range(50).forEach(function(){
+      svg.append('circle')
+        .attr('cx', Math.random() * 800)
+        .attr('cy', Math.random() * 800)
+        .attr('r', 15);
+    });
+    </script>
+  </body>
+</html>

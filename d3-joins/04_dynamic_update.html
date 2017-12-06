@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <div id="chart">
+    </div>
+
+    <button onclick="addDataPoint()">Add element</button>
+    
+    <script>
+      var idCounter = 0;
+      var DATA_LENGTH = 8;
+      var myData = [];
+
+      var updateChart = function(){
+        // chart code goes here
+      };
+
+      var addDataPoint = function(){
+        myData.push({
+          id: idCounter++,
+          val: Math.random() * 300
+        });
+        if(myData.length > DATA_LENGTH){
+          myData.shift();
+        }
+
+        updateChart();
+      };
+
+    </script>
+  </body>
+</html>

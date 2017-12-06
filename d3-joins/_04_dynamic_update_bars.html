@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <div id="chart">
+    </div>
+
+    <button onclick="addDataPoint()">Add element</button>
+    
+    <script>
+      var idCounter = 0;
+      var DATA_LENGTH = 8;
+      var myData = [];
+
+      var svg = d3.select('#chart').append('svg')
+        .attr('width', 800)
+        .attr('height', 300);
+      
+      var updateChart = function(){
+        var bars = svg.selectAll('rect').data(myData, function(d){ return d.id; });
+      
+        var OFFSET = 200;
+
+        bars.exit()
+          .transition()
+            .attr('x', -50)
+            .attr('y', function(d){ return 300 - d.val; })
+            .attr('height', function(d){ return d.val; })
+            .style('opacity', 0)
+          .remove();
+
+        bars.enter()
+          .append('rect')
+            .attr('x', 800)
+            .attr('y', 300)
+            .attr('height', 0)
+            .style('opacity', 0)
+          .merge(bars)
+            .transition()
+            .attr('x', function(d,i){ return i * 50 + OFFSET; })
+            .attr('width', 45)
+            .attr('y', function(d,i){ return 300 - d.val; })
+            .attr('height', function(d,i){ return d.val; })
+            .style('opacity', 1);
+      };
+
+      var addDataPoint = function(){
+        myData.push({
+          id: idCounter++,
+          val: Math.random() * 300
+        });
+        if(myData.length > DATA_LENGTH){
+          myData.shift();
+        }
+
+        updateChart();
+      };
+
+      for(var i = 0; i < DATA_LENGTH; i++){
+        addDataPoint();
+      }
+
+    </script>
+  </body>
+</html>

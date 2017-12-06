@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+
+    <script>
+      var svg = d3.select('svg');
+
+      var randomColor = function(){
+        return 'rgb(' + (Math.random() * 255).toFixed(0) + ', ' + (Math.random() * 255).toFixed(0) + ', ' + (Math.random() * 255).toFixed(0) + ')';
+      }
+
+      var triangle = function(scale){
+        return 'M 0 0 L ' + scale + ' 0 L ' + (scale/2) + ' ' + (scale/2) + ' Z';
+      }
+
+      var twist = function(){
+        d3.select(this).transition()
+          .duration(1500)
+          .attr('d', function(){ return triangle(Math.random() * 400 + 50)})
+          .attr('transform', 'translate(300,300) rotate('+Math.random() * 360 +')')
+          .style('fill', randomColor())
+          .on('end', twist);
+      }
+
+      svg.append('path')
+        .style('fill', randomColor())
+        .attr('transform', 'translate(300,300) rotate(0)')
+        .attr('d', function(){ return triangle(Math.random() * 400 + 50)})
+        .each(twist);
+    </script>
+  </body>
+</html>

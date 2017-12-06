@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <!-- more colors: -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    
+    <script>
+      var svg = d3.select('svg');
+
+      var arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(100);
+      
+      d3.range(30).forEach(function(){
+        svg.append('path')
+          .style('stroke', 'none')
+          .style('fill', function(){ return d3.interpolateOrRd(Math.random()); })
+          .attr('transform', 'translate(' + Math.random() * 800 + ', ' + Math.random() * 800 + ')')
+          .attr('d', function(){
+            var startAngle = Math.random() * Math.PI;
+            return arc({
+              startAngle: startAngle,
+              endAngle: startAngle * 2
+            });
+          });
+      });
+    </script>
+  </body>
+</html>

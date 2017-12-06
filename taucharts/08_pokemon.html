@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations.">
+
+    <script src="https://cdn.jsdelivr.net/d3js/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.js" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.css">
+
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+
+    <style>
+      #pokemon-image {
+        width: 300px;
+        height: 300px;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        pointer-events: none;    
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="chart"></div>
+    <img id="pokemon-image"></img>
+    <script>
+    
+    var drawChart = function(data){
+
+      var imgBox = document.querySelector('#pokemon-image');
+
+      var chart = new tauCharts.Chart({
+          data: data,
+          type: 'scatterplot',
+          x: 'Attack',
+          y: ['Generation', 'Defense'],
+          color: 'Type 1',
+          plugins: [
+              tauCharts.api.plugins.get('tooltip')({
+                fields: ['#', 'Name'],
+                formatters: {
+                  '#': function(id){
+                    imgBox.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + '.png'; 
+                    // pokedex.src = "https://www.pokemon.com/us/pokedex/" + str.toLowerCase();
+                    return id;
+                  }
+                }
+              })
+          ]
+      });
+
+      chart.renderTo('#chart');
+
+    };
+
+var data = [];
+
+    fetch('https://dominiku.indus.uberspace.de/data/pokemon.csv')
+    .then(function(result){
+      return result.text();
+    })
+    .then(function(rawData){
+      data = d3.csvParse(rawData, function(d){
+        return {
+          '#': d['#'],
+          'Name': d['Name'],
+          'Type 1': d['Type 1'],
+          'Type 2': d['Type 2'],
+          'Total': +d['Total'],
+          'HP': +d['HP'],
+          'Attack': +d['Attack'],
+          'Defense': +d['Defense'],
+          'Sp. Atk': +d['Sp. Atk'],
+          'Sp. Def': +d['Sp. Def'],
+          'Speed': +d['Speed'],
+          'Generation': d['Generation'],
+          'Legendary': d['Legendary']
+        };
+      });
+      console.log(data);
+      drawChart(data);
+    });
+
+    </script>
+  </body>
+</html>

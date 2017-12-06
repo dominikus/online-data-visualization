@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations.">
+
+    <script src="https://cdn.jsdelivr.net/d3js/3.5.17/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.css">
+  </head>
+
+  <body>
+    <div id="chart"></div>
+    <script>
+
+var data = [
+  {"id":3,"name":"Venusaur","type":"Grass","hp":80,"attack":82,"defense":83},
+  {"id":4,"name":"Charmander","type":"Fire","hp":39,"attack":52,"defense":43},
+  {"id":70,"name":"Weepinbell","type":"Grass","hp":65,"attack":90,"defense":50},
+  {"id":73,"name":"Tentacruel","type":"Water","hp":80,"attack":70,"defense":65},
+  {"id":85,"name":"Dodrio","type":"Normal","hp":60,"attack":110,"defense":70},
+  {"id":99,"name":"Kingler","type":"Water","hp":55,"attack":130,"defense":115},
+  {"id":122,"name":"Mr. Mime","type":"Psychic","hp":40,"attack":45,"defense":65},
+  {"id":142,"name":"Aerodactyl","type":"Rock","hp":80,"attack":105,"defense":65},
+  {"id":149,"name":"Dragonite","type":"Dragon","hp":91,"attack":134,"defense":95},
+  {"id":150,"name":"Mewtwo","type":"Psychic","hp":106,"attack":110,"defense":90}
+];
+
+var chart = new tauCharts.Chart({
+    data: data,
+    type: 'bar',
+    x: 'id',
+    y: 'hp',
+    color: 'type',
+    plugins: [
+        tauCharts.api.plugins.get('tooltip')(),
+        tauCharts.api.plugins.get('legend')(),
+    ]
+});
+
+chart.renderTo('#chart');
+
+    </script>
+  </body>
+</html>

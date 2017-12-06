@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style>text {
+      font-family: sans-serif;
+      fill: white;
+    }</style>
+  </head>
+
+  <body>
+    <svg width="800" height="800"></svg>
+    <script>
+      var svg = d3.select('svg');
+
+      var data = [23, 53, 2, 2, 11];
+
+      var pie = d3.pie();
+
+      var arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(100);
+
+      var g = svg.append('g')
+        .attr('transform', 'translate(200, 200)');
+      
+      var enter = g.selectAll('path').data(pie(data))
+        .enter();
+
+      enter.append('path')
+        .style('stroke', 'white')
+        .style('fill', function(d,i){ return d3.schemeCategory10[i]; })
+        .attr('d', arc);
+
+      enter.append('text')
+        .text(function(d){ return d.data; })
+        .attr('text-anchor', 'middle')
+        .attr('x', function(d){ return arc.centroid(d)[0]; })
+        .attr('y', function(d){ return arc.centroid(d)[1]; });
+
+      console.log(pie(data));
+    </script>
+  </body>
+</html>

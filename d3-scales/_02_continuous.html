@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic datavis html</title>
+    <meta name="description" content="A template for creating online data visualizations using d3.js.">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js" type="text/javascript"></script>  
+    
+    <style>
+    line {
+      stroke: #333;
+    }</style>
+  </head>
+
+  <body>
+    <div id="chart">
+      <svg width="1000" height="300"></svg>
+    </div>
+
+    <script>
+      var myData = _.range(0.01, 1, 0.01);
+
+      var svg = d3.select('svg');
+
+      var horizontalScale = d3.scaleLinear()
+        .domain([0, 1])
+        .range([0, 150]);
+
+      var plotPoints = function(scale, offset){
+        var g = svg.append('g');
+        g.append('line').attr('x1', offset).attr('x2', horizontalScale.range()[1] + offset).attr('y1', scale.range()[0]).attr('y2', scale.range()[0]);
+        g.append('line').attr('x1', offset).attr('x2', offset).attr('y1', scale.range()[0]).attr('y2', scale.range()[1]);
+        g.selectAll('circle')
+        .data(myData)
+          .enter().append('circle')
+            .attr('cx', function(d){ return horizontalScale(d) + offset})
+            .attr('cy', scale)
+            .attr('r', 2);
+      }
+
+      // draw linear scale:
+      var linScale = d3.scaleLinear().range([150, 0]);
+      plotPoints(linScale, 0);
+
+      // draw power scale with exponent 2:
+      var powScale = d3.scalePow().exponent(2).range([150, 0]);
+      plotPoints(powScale, 180);
+
+      // draw sqrt scale:
+      var sqrtScale = d3.scaleSqrt().range([150, 0]);
+      plotPoints(sqrtScale, 360);
+
+      // draw logarithmic scale:
+      var logScale = d3.scaleLog().range([150, 0]);
+      plotPoints(logScale, 540);
+      
+    </script>
+  </body>
+</html>
