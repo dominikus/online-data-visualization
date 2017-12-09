@@ -6,6 +6,7 @@
     <title>Basic datavis html</title>
     <meta name="description" content="A template for creating online data visualizations using d3.js.">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js" type="text/javascript"></script>  
     
     <style>
     line {
@@ -15,8 +16,7 @@
 
   <body>
     <div id="chart">
-      <svg width="1000" height="300">
-      </svg>
+      <svg width="1000" height="300"></svg>
     </div>
 
     <script>
@@ -24,67 +24,7 @@
 
       var remoteDataURL = 'https://api.coindesk.com/v1/bpi/historical/close.json';
 
-      fetch(remoteDataURL)
-      .then(function(result){
-        return result.json();
-      })
-      .then(function(parsedResult){
-        var data = parsedResult.bpi;
-
-        var xScale = d3.scaleTime()
-          .domain([new Date(2017, 10, 7), new Date(2017, 11, 7)])
-          .range([50, 970]);
-        
-        var yScale = d3.scaleLinear()
-          .domain([0, 17000])
-          .range([280, 10]);
-
-        var dataArray = [];
-        console.log(Object.keys(data));
-
-        Object.keys(data).forEach(function(date){
-          dataArray.push({
-            "date": date,
-            "value": data[date]
-          });
-        });
-
-        var lineGen = d3.line()
-          .x(function(d) { return xScale(new Date(d.date)); })
-          .y(function(d) { return yScale(d.value); });
-
-        var lineGenOutput = lineGen(dataArray);
-        console.log(lineGenOutput);
-
-        svg.append('path')
-          .attr('d', lineGenOutput)
-          .style('fill', 'none')
-          .style('stroke', '#333');
-
-        /* var circle = svg.selectAll("circle")
-          .data(dataArray);
-
-        circle.exit().remove();
-
-        circle.enter().append("circle")
-            .attr("r", 15)
-          .merge(circle)
-            .attr("cx", function(d) { return xScale(new Date(d.date)); })
-            .attr("cy", function(d) { return yScale(d.value); });
-        */
-
-        var xAxis = d3.axisBottom(xScale);
-
-        svg.append('g')
-          .attr('transform', 'translate(0, 280)') 
-          .call(xAxis);
-
-        var yAxis = d3.axisLeft(yScale);
-
-        svg.append('g')
-          .attr('transform', 'translate(50, 0)')
-          .call(yAxis);
-      });      
+      // draw a scatterplot/line chart based on this data
 
     </script>
   </body>

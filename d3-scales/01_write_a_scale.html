@@ -18,9 +18,13 @@
 
       var svg = d3.select('svg');
 
-      var myScale = d3.scaleLinear()
-          .domain([0, 60])
-          .range([0, 200]);
+      var myScale = function(d){
+        // insert scale here
+        // should map from [0, 60] to [0, 200]
+
+        // remove this once you're done:
+        return d;
+      };
 
       svg.selectAll('circle').data(myData)
         .enter()
@@ -28,12 +32,6 @@
           .attr('cx', function(d,i){ return i * 50; })
           .attr('r', 25)
           .attr('cy', myScale);
-      
-      var myAxis = d3.axisRight(myScale);
-
-      svg.append('g')
-        .attr('transform', 'translate(250, 0)')
-        .call(myAxis);
       
     </script>
   </body>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Basic datavis html</title>
     <meta name="description" content="A template for creating online data visualizations using d3.js.">
-    <script src="d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
   </head>
 
   <body>
@@ -18,10 +18,8 @@
     </div>
 
     <script>
-      var myData = [12,24,3,7,55, 75];
-      d3.select('#chart').selectAll('p').data(myData)
-        .enter();
-
+      var myData = [12,24,3,7,55];
+      d3.select('#chart').selectAll('p').data(myData);
     </script>
   </body>
 </html>

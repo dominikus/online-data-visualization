@@ -36,26 +36,16 @@ fetch(remoteDataURL)
   return d.json();
 })
 .then(function(data){
+  var data = d;
 
   console.log('loaded data with ' + data.length + ' entries');
 
-  var myData = [];
-  for(var i = 0; i < data.length; i++){
-    var d = data[i];
-
-    myData.push({
-      "Attack": +d.Attack,
-      "Defense": +d.Defense,
-      "Type 1": d["Type 1"]
-    });
-  }
-
   var chart = new tauCharts.Chart({
-    data: myData,
+    data: data,
     type: 'scatterplot',
-    x: 'Attack',
-    y: 'Defense',
-    color: 'Type 1',
+    x: 'attack',
+    y: 'defense',
+    color: 'type',
     plugins: [
         tauCharts.api.plugins.get('tooltip')(),
         tauCharts.api.plugins.get('legend')()
