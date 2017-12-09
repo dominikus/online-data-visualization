@@ -14,6 +14,34 @@
     <script>
       var countries = 'https://gist.githubusercontent.com/denjn5/c96c5900f0ffefc77d2bfe57d4d25df5/raw/6aa262b7711c239884d703934081afb22dfe2a79/country-hierarchy.csv';
       
+      d3.csv(countries, function(data){
+        console.log(data);
+
+        var stratifier = d3.stratify()
+          .parentId(function(d){ return d.parentId; });
+
+        var stratified = stratifier(data).sum(function(){ return 1; });
+
+        console.log(stratified);
+
+        var pack = d3.pack()
+          .size([800, 800]);
+
+        pack(stratified);
+        
+        console.log(stratified.descendants());
+
+        var svg = d3.select('svg').selectAll('circle')
+          .data(stratified.descendants())
+          .enter()
+            .append('circle')
+              .attr('cx', function(d){ return d.x; })
+              .attr('cy', function(d){ return d.y; })
+              .attr('r', function(d){ return d.r; })
+              .style('fill', 'none')
+              .style('stroke', '#333');
+
+      });
     </script>
   </body>
 </html>

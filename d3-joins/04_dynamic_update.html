@@ -19,8 +19,41 @@
       var DATA_LENGTH = 8;
       var myData = [];
 
+      var svg = d3.select('#chart').append('svg')
+        .attr('width', 400)
+        .attr('height', 400);
+
       var updateChart = function(){
         // chart code goes here
+        console.log(myData);
+
+        var circle = svg.selectAll("circle")
+          .data(myData, function(d){ return d.id; });
+  
+        circle.exit().remove();
+        
+        circle.enter().append("circle")
+              .attr("cx", function(d, i){ return i * 35; })
+              .attr("cy", function(d){ return d.val; })
+              .attr("r", function(d){ return d.val / 10; })
+              .style('fill', function(d){
+                var color = 'rgb('+ (d.val.toFixed(0)) +', '+ (d.val.toFixed(0)) + ', '+ (255 - d.val.toFixed(0)) +')';
+                console.log(color);
+                return color;
+              })
+          .merge(circle)
+            .transition()
+              .attr("cx", function(d, i){ return i * 35; })
+              .attr("cy", function(d){ return d.val; })
+              .attr("r", function(d){ return d.val / 10; })
+              .style('fill', function(d){
+                var color = 'rgb('+ (255- d.val.toFixed(0)) +', '+ (255 - d.val.toFixed(0)) + ', '+ d.val.toFixed(0)+')';
+                console.log(color);
+                return color;
+
+              });
+
+
       };
 
       var addDataPoint = function(){
