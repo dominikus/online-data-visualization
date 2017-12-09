@@ -29,7 +29,10 @@
       var g = svg.append('g')
         .attr('transform', 'translate(200, 200)');
       
-      var enter = g.selectAll('path').data(pie(data))
+      var pieData = pie(data);
+      console.log(pieData);
+      
+      var enter = g.selectAll('path').data(pieData)
         .enter();
 
       enter.append('path')
@@ -43,7 +46,6 @@
         .attr('x', function(d){ return arc.centroid(d)[0]; })
         .attr('y', function(d){ return arc.centroid(d)[1]; });
 
-      console.log(pie(data));
     </script>
   </body>
 </html>

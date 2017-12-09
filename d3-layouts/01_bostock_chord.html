@@ -49,7 +49,7 @@ var color = d3.scaleOrdinal()
     .domain(d3.range(4))
     .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
 
-var g = svg.append("g")
+ var g = svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
     .datum(chord(matrix));
 
@@ -63,6 +63,16 @@ group.append("path")
     .style("fill", function(d) { return color(d.index); })
     .style("stroke", function(d) { return d3.rgb(color(d.index)).darker(); })
     .attr("d", arc);
+
+    g.append("g")
+    .attr("class", "ribbons")
+  .selectAll("path")
+  .data(function(chords) { return chords; })
+  .enter().append("path")
+    .attr("d", ribbon)
+    .style("fill", function(d) { return color(d.target.index); })
+    .style("stroke", function(d) { return d3.rgb(color(d.target.index)).darker(); });
+/*
 
 var groupTick = group.selectAll(".group-tick")
   .data(function(d) { return groupTicks(d, 1e3); })
@@ -83,14 +93,6 @@ groupTick
     .style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
     .text(function(d) { return formatValue(d.value); });
 
-g.append("g")
-    .attr("class", "ribbons")
-  .selectAll("path")
-  .data(function(chords) { return chords; })
-  .enter().append("path")
-    .attr("d", ribbon)
-    .style("fill", function(d) { return color(d.target.index); })
-    .style("stroke", function(d) { return d3.rgb(color(d.target.index)).darker(); });
 
 // Returns an array of tick angles and values for a given group and step.
 function groupTicks(d, step) {
@@ -98,7 +100,7 @@ function groupTicks(d, step) {
   return d3.range(0, d.value, step).map(function(value) {
     return {value: value, angle: value * k + d.startAngle};
   });
-}
+}*/
 
 
 </script>
